@@ -15,6 +15,13 @@ just prints "Hello world!"
     $ hello
     Hello world!
 
+## Command line arguments
+
+You can also specify a name to be greeted on the command line:
+
+    $ hello --name Brian
+    Hello Brian!
+
 # Develop
 
 ## Setup an environment
