@@ -2,28 +2,20 @@
 test module for the main module
 """
 import shlex
+import StringIO
+import textwrap
 
 from nose.tools import assert_equal
 
 import hello.main
 
 
-def test_hello_world():
+def test_compose():
     """
-    Checks that the simplest message is 'Hello world!'
+    Checks how to compose the simplest message
     """
     expected = "Hello world!"
-    actual = hello.main.compose()
-    assert_equal(actual, expected)
-
-
-def test_hello_name():
-    """
-    Checks that a name can be specified for the greeting
-    """
-    name = "Guido"
-    expected = "Hello Guido!"
-    actual = hello.main.compose(name)
+    actual = hello.main.compose('Hello', 'world')
     assert_equal(actual, expected)
 
 
@@ -36,3 +28,18 @@ def test_parse_command_line():
     expected = 'Terry'
     actual = args.name
     assert_equal(actual, expected)
+
+
+def test_read_config():
+    """
+    Checks that a configuration is read
+    """
+    mock_config_file = StringIO.StringIO()
+    mock_config_file.write(textwrap.dedent(
+        """
+        [general]
+        greeting=Good morning
+        """))
+    mock_config_file.seek(0)
+    config = hello.main.read_config(mock_config_file)
+    assert_equal('Good morning', config.get('general', 'greeting'))

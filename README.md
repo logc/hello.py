@@ -22,6 +22,23 @@ You can also specify a name to be greeted on the command line:
     $ hello --name Brian
     Hello Brian!
 
+You can also specify a configuration file on the command line:
+
+    $ hello --config sample.cfg
+
+## Configuration
+
+You can change the greeting message on the configuration file included,
+`hello.cfg`. If you edit the `greeting` value to hold someting:
+
+    [general]
+    greeting=Good morning
+
+then:
+
+    $ hello
+    Good morning world!
+
 # Develop
 
 ## Setup an environment
