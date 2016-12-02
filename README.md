@@ -28,14 +28,35 @@ virtualenv and link the package there as a development dependency:
     (venv) $ hello
     Hello world!
 
-A `.gitignore` file is not included in the repository in order to minimize
-assumptions on development tools or styles. It is recommended to ignore at
-least the virtual environment:
+You will need to install the development dependencies, which are listed in a
+separate file `requirements.dev.txt`. These are depependencies that are not
+required to use the package. A normal user might not want them; that is why
+they are not listed in `setup.py`.
+
+    (venv) $ pip install -r requirements.dev.txt
+
+No `.gitignore` file is included in the repository to avoid assuming which
+development tools or styles are you using. It is recommended to ignore at least
+the virtual environment:
 
     $ cat << EOF > .gitignore
     /.gitignore
     venv
     EOF
+
+## Run unit tests
+
+Before and after you change any source code, you should run the unit tests to
+check that everything is working. 
+
+    (venv) $ python setup.py test
+    tests.test_main.test_hello_world
+    Checks that the simplest message is 'Hello world!' ... ok
+    
+    ----------------------------------------------------------------------
+    Ran 1 test in 0.005s
+    
+    OK
 
 # Uninstall
 
