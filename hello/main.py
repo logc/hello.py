@@ -4,6 +4,7 @@ Module with main entry points for the hello package
 import argparse
 import sys
 import ConfigParser
+import logging
 
 from pkg_resources import Requirement, resource_filename
 
@@ -35,6 +36,11 @@ def parse_command_line(command_line):
     parser = argparse.ArgumentParser()
     parser.add_argument('--name', default='world')
     parser.add_argument('-c', '--config', default='hello.cfg')
+    parser.add_argument(
+        '-l', '--log-level', metavar='LEVEL',
+        action='store', dest='log_level', default=21,
+        type=int, choices=xrange(51),
+        help='1 DEBUG; 11 INFO; 21 WARNING; 31 ERROR; 41 CRITICAL')
     return parser.parse_args(command_line)
 
 
@@ -42,7 +48,9 @@ def compose(greeting, name):
     """
     Composes the message that has to be printed.
     """
-    return "{0} {1}!".format(greeting, name)
+    message = "{0} {1}!".format(greeting, name)
+    logging.debug('Composed a greeting: %s', message)
+    return message
 
 
 def run():
@@ -50,6 +58,9 @@ def run():
     Main entry point.
     """
     args = parse_command_line(sys.argv[1:])
+    logging.basicConfig(
+        format='%(asctime)s %(module)s.%(funcName)s %(levelname)s %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S', level=args.log_level)
     config = parse_config(args.config)
     greeting = config.get('general', 'greeting') or \
         config.defaults().get('greeting')

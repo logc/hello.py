@@ -26,6 +26,13 @@ You can also specify a configuration file on the command line:
 
     $ hello --config sample.cfg
 
+If you want to enable logging, set a low integer as the log-level argument.
+Refer to `--help` for more details.
+
+    $ hello --log-level 1
+    2016-12-03 14:33:51 main.compose DEBUG Composed a greeting: Hello world!
+    Hello world!
+
 ## Configuration
 
 You can change the greeting message on the configuration file included,

@@ -6,6 +6,7 @@ import StringIO
 import textwrap
 
 from nose.tools import assert_equal
+from mock import patch
 
 import hello.main
 
@@ -43,3 +44,13 @@ def test_read_config():
     mock_config_file.seek(0)
     config = hello.main.read_config(mock_config_file)
     assert_equal('Good morning', config.get('general', 'greeting'))
+
+
+@patch('hello.main.logging')
+def test_logging(mock_logging):
+    """
+    Checks that a statement is logged
+    """
+    hello.main.compose('Hi', 'beautiful')
+    mock_logging.debug.assert_called_once_with(
+        'Composed a greeting: %s', 'Hi beautiful!')
