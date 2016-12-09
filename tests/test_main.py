@@ -6,7 +6,7 @@ import StringIO
 import textwrap
 
 from nose.tools import assert_equal
-from mock import patch
+from mock import patch, MagicMock
 
 import hello.main
 
@@ -54,3 +54,37 @@ def test_logging(mock_logging):
     hello.main.compose('Hi', 'beautiful')
     mock_logging.debug.assert_called_once_with(
         'Composed a greeting: %s', 'Hi beautiful!')
+
+
+@patch('MySQLdb.connect')
+def test_database_persistence(mock_connect):
+    mock_connection = MagicMock()
+    mock_connect.return_value = mock_connection
+    mock_cursor = MagicMock()
+    mock_connection.cursor.return_value = mock_cursor
+    # Discard reads and writes to database
+    mock_cursor.execute_return_value = None
+    # Returns None the first time it is called, then 1, then 2 ...
+    mock_cursor.fetchone.side_effect = [None, (1,), (2,)]
+    mock_config_file = StringIO.StringIO()
+    mock_config_file.write(textwrap.dedent(
+        """
+        [general]
+        greeting=
+
+        [database]
+        host=
+        name=
+        user=
+        password=password_cannot_be_empty
+        """))
+    mock_config_file.seek(0)
+    config = hello.main.read_config(mock_config_file)
+    greeted_name = "Luis"
+    expected = " I have never seen you!"
+    actual = hello.main.comment_if_already_seen(greeted_name, config)
+    assert_equal(actual, expected)
+
+    expected = " I have seen you 1 times!"
+    actual = hello.main.comment_if_already_seen(greeted_name, config)
+    assert_equal(actual, expected)
