@@ -132,9 +132,9 @@ the virtual environment:
     venv
     EOF
 
-## Run unit tests
+## Run tests
 
-Before and after you change any source code, you should run the unit tests to
+Before and after you change any source code, you should run all tests to
 check that everything is working.
 
     (venv) $ python setup.py test
@@ -144,6 +144,31 @@ check that everything is working.
     ----------------------------------------------------------------------
     Ran 1 test in 0.005s
 
+    OK
+
+### Running only unit tests
+
+Tests that do not require additional systems to be up and running (database, etc
+...) can be run with the alias `unit_test`:
+
+    (venv) $ python setup.py unit_test
+    .....
+    ----------------------------------------------------------------------
+    Ran 5 tests in 0.020s
+    
+    OK
+
+### Running only integration tests
+
+Running only integration tests can be useful if you want to make sure that the
+package still works with all additional systems that it requires in production.
+They can be run with the alias `integration_test`:
+
+    (venv) $ python setup.py integration_test
+    .....
+    ----------------------------------------------------------------------
+    Ran 5 tests in 0.061s
+    
     OK
 
 # Uninstall
